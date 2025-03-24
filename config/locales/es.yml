@@ -1,0 +1,36 @@
+es:
+  games:
+    enter_code:
+      title: "Ingresa el Código del Juego"
+      label: "Código del Juego"
+      submit: "Ingresar"
+      or: "O"
+      login: "Iniciar sesión como administrador"
+  devise:
+    sessions:
+      new:
+        log_in: "Iniciar sesión"
+        email: "Correo electrónico"
+        password: "Contraseña"
+        remember_me: "Recuérdame"
+        submit: "Iniciar sesión"
+  activerecord:
+      models:
+        game: "Juego"
+      attributes:
+        game:
+          code: "Código"
+          name: "Nombre"
+          header_color: "Color del Encabezado"
+          text_color: "Color del Texto"
+          background_color: "Color de Fondo"
+          start_text: "Texto de Inicio"
+          during_text: "Texto Durante el Juego"
+          end_text: "Texto de Fin"
+          images: "Imágenes"
+  errors:
+      template:
+        header:
+          one: "1 error impidió guardar el %{model}"
+          other: "%{count} errores impidieron guardar el %{model}"
+        body: "Hubo problemas con los siguientes campos:"

@@ -1,0 +1,31 @@
+en:
+  hello: "Hello"
+  games:
+    enter_code:
+      title: "Enter Game Code"
+      label: "Game Code"
+      submit: "Enter"
+      or: "Or"
+      login: "Login as Administrator"
+  devise:
+    sessions:
+      new:
+        log_in: "Log in"
+        email: "Email"
+        password: "Password"
+        remember_me: "Remember me"
+        submit: "Log in"
+  activerecord:
+    models:
+      game: "Game"
+    attributes:
+      game:
+        code: "Code"
+        name: "Name"
+        header_color: "Header Color"
+        text_color: "Text Color"
+        background_color: "Background Color"
+        start_text: "Start Text"
+        during_text: "During Game Text"
+        end_text: "End Text"
+        images: "Images"

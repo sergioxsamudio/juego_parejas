@@ -1,0 +1,32 @@
+<h1>Ingresa el Código del Juego</h1>
+<%= form_with url: verify_code_games_path, method: :post, local: true do |f| %>
+  <%= f.label :code, "Código del Juego" %>
+  <%= f.text_field :code, required: true %>
+  <%= f.submit "Ingresar" %>
+<% end %>
+
+# app/views/games/register_players.html.erb
+<h1>Registro de Jugadores</h1>
+<%= form_with url: save_players_game_path(@game), method: :post, local: true do |f| %>
+  <h2>Jugador 1</h2>
+  <%= f.fields_for :player1 do |p| %>
+    <%= p.label :first_name, "Nombre" %>
+    <%= p.text_field :first_name, required: true %>
+    <%= p.label :last_name, "Apellido" %>
+    <%= p.text_field :last_name, required: true %>
+    <%= p.label :email, "Correo" %>
+    <%= p.email_field :email, required: true %>
+  <% end %>
+
+  <h2>Jugador 2</h2>
+  <%= f.fields_for :player2 do |p| %>
+    <%= p.label :first_name, "Nombre" %>
+    <%= p.text_field :first_name, required: true %>
+    <%= p.label :last_name, "Apellido" %>
+    <%= p.text_field :last_name, required: true %>
+    <%= p.label :email, "Correo" %>
+    <%= p.email_field :email, required: true %>
+  <% end %>
+
+  <%= f.submit "Registrar" %>
+<% end %>

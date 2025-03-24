@@ -1,0 +1,74 @@
+<%= form_with(model: game, class: "max-w-3xl mx-auto p-4 bg-white rounded-lg shadow-md space-y-4", multipart: true) do |form| %>
+  <% if game.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 rounded-md">
+      <h2 class="font-semibold"><%= pluralize(game.errors.count, "error") %> impidieron guardar el juego:</h2>
+      <ul class="list-disc ml-5 mt-2">
+        <% game.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Campo de Código -->
+  <div>
+    <%= form.label :code, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.text_field :code, class: "mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" %>
+  </div>
+
+  <!-- Campo de Nombre -->
+  <div>
+    <%= form.label :name, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.text_field :name, class: "mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" %>
+  </div>
+
+  <!-- Campo de Color de Encabezado -->
+  <div>
+    <%= form.label :header_color, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.color_field :header_color, class: "mt-1 block w-12 h-8 p-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer" %>
+  </div>
+
+  <!-- Campo de Color de Texto -->
+  <div>
+    <%= form.label :text_color, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.color_field :text_color, class: "mt-1 block w-12 h-8 p-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer" %>
+  </div>
+
+  <!-- Campo de Color de Fondo -->
+  <div>
+    <%= form.label :background_color, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.color_field :background_color, class: "mt-1 block w-12 h-8 p-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer" %>
+  </div>
+
+  <!-- Campo de Texto de Inicio -->
+  <div>
+    <%= form.label :start_text, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.text_area :start_text, rows: 3, class: "mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" %>
+  </div>
+
+  <!-- Campo de Texto Durante el Juego -->
+  <div>
+    <%= form.label :during_text, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.text_area :during_text, rows: 3, class: "mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" %>
+  </div>
+
+  <!-- Campo de Texto de Fin -->
+  <div>
+    <%= form.label :end_text, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.text_area :end_text, rows: 3, class: "mt-1 block w-full px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" %>
+  </div>
+
+  <!-- Campo de Imágenes -->
+  <div>
+    <%= form.label :images, class: "block text-xs font-medium text-gray-700" %>
+    <%= form.file_field :images, multiple: true, accept: 'image/*', class: "mt-1 block w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" %>
+  </div>
+
+  <!-- Botón de Enviar -->
+  <div>
+    <%= form.submit "Crear Juego", class: "w-full flex justify-center py-1 px-3 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  </div>
+<% end %>
+
+ 
+

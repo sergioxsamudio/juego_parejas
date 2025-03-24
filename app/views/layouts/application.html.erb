@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Parejas Game" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Parejas Game</h1>
+
+      <!-- Selector de idioma -->
+      <div>
+        <%= link_to "🇪🇸 Español", change_locale_path("es"), class: "text-blue-500 hover:text-blue-700" %> |
+        <%= link_to "🇺🇸 English", change_locale_path("en"), class: "text-blue-500 hover:text-blue-700" %>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 px-5">
+      <%= yield %>
+    </main>
+  </body>
+</html>
+
+
