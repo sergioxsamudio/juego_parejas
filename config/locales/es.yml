@@ -18,6 +18,11 @@ es:
     models:
       game: 'Juego'
     attributes:
+      player:
+        first_name: "Nombre"
+        last_name: "Apellido"
+        email: "Correo electrónico"
+        cellphone: "Teléfono"
       game:
         code: 'Código'
         name: 'Nombre'
@@ -35,3 +40,8 @@ es:
           one: "1 error impidió guardar el %{model}"
           other: "%{count} errores impidieron guardar el %{model}"
         body: "Hubo problemas con los siguientes campos:"
+  players:
+    new:
+      title: "Ingrese sus datos antes de jugar"
+      player_number: "Jugador %{number}"
+      submit: "Empezar juego"

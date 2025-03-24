@@ -68,7 +68,7 @@ class GamesController < ApplicationController
   def verify_code
     @game = Game.find_by(code: params[:code])
     if @game
-      redirect_to register_players_game_path(@game)
+      redirect_to new_game_player_path(game_id: @game.id)
     else
       flash[:alert] = "Código inválido"
       redirect_to enter_code_games_path

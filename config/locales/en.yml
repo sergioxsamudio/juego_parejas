@@ -15,10 +15,20 @@ en:
         password: "Password"
         remember_me: "Remember me"
         submit: "Log in"
+  players:
+    new:
+      title: "Enter your details before playing"
+      player_number: "Player %{number}"
+      submit: "Start game"
   activerecord:
     models:
       game: "Game"
     attributes:
+      player:
+        first_name: "First Name"
+        last_name: "Last Name"
+        email: "Email"
+        cellphone: "Phone"
       game:
         code: "Code"
         name: "Name"

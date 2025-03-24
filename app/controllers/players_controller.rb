@@ -13,6 +13,12 @@ class PlayersController < ApplicationController
 
   # GET /players/new
   def new
+    @game = Game.find_by(id: params[:game_id])
+    unless @game
+      flash[:alert] = "Juego no encontrado"
+      redirect_to root_path
+      return
+    end
     @player = Player.new
   end
 

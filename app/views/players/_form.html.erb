@@ -1,42 +1,45 @@
-<%= form_with(model: player, class: "contents") do |form| %>
-  <% if player.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(player.errors.count, "error") %> prohibited this player from being saved:</h2>
+<div class="min-h-screen flex flex-col items-center justify-center" style="background-color: <%= @game.background_color %>;">
+  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
+      <%= t('players.new.title') %>
+    </h1>
 
-      <ul class="list-disc ml-6">
-        <% player.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+    <%= form_with model: [@game, Player.new], url: game_players_path(@game), local: true do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <% 2.times do |i| %>
+          <div>
+            <h2 class="text-xl font-semibold mb-2" style="color: <%= @game.text_color %>;">
+              <%= t('players.new.player_number', number: i + 1) %>
+            </h2>
+            
+            <div class="mb-4">
+              <%= f.label "players_attributes[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium" %>
+              <%= f.text_field "players_attributes[#{i}][first_name]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label "players_attributes[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium" %>
+              <%= f.text_field "players_attributes[#{i}][last_name]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label "players_attributes[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium" %>
+              <%= f.email_field "players_attributes[#{i}][email]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label "players_attributes[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium" %>
+              <%= f.telephone_field "players_attributes[#{i}][cellphone]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+            </div>
+          </div>
         <% end %>
-      </ul>
-    </div>
-  <% end %>
+      </div>
 
-  <div class="my-5">
-    <%= form.label :game_id %>
-    <%= form.text_field :game_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": player.errors[:game_id].none?, "border-red-400 focus:outline-red-600": player.errors[:game_id].any?}] %>
-  </div>
+      <div class="mt-6 flex justify-center">
+        <%= f.submit t('players.new.submit'), class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform" %>
+      </div>
+    <% end %> <!-- Cierra el form_with -->
 
-  <div class="my-5">
-    <%= form.label :first_name %>
-    <%= form.text_field :first_name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": player.errors[:first_name].none?, "border-red-400 focus:outline-red-600": player.errors[:first_name].any?}] %>
   </div>
+</div>
 
-  <div class="my-5">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": player.errors[:last_name].none?, "border-red-400 focus:outline-red-600": player.errors[:last_name].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :email %>
-    <%= form.text_field :email, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": player.errors[:email].none?, "border-red-400 focus:outline-red-600": player.errors[:email].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :cellphone %>
-    <%= form.text_field :cellphone, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": player.errors[:cellphone].none?, "border-red-400 focus:outline-red-600": player.errors[:cellphone].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
