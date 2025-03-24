@@ -22,10 +22,10 @@ class GamesController < ApplicationController
   # POST /games or /games.json
   def create
     @game = Game.new(game_params)
-
+    @game = current_admin.games.build(game_params)
     respond_to do |format|
       if @game.save
-        format.html { redirect_to @game, notice: "Game was successfully created." }
+        format.html { redirect_to game_path(@game, locale: I18n.locale.to_s), notice: "Game was successfully created." }
         format.json { render :show, status: :created, location: @game }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -106,6 +106,6 @@ class GamesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def game_params
-      params.expect(game: [ :code, :name, :header_color, :text_color, :background_color, :start_text, :during_text, :end_text, :admin_id ])
+      params.expect(game: [ :code, :name, :header_color, :text_color, :background_color, :start_text, :during_text, :end_text ])
     end
 end

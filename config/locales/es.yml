@@ -15,19 +15,20 @@ es:
         remember_me: "Recuérdame"
         submit: "Iniciar sesión"
   activerecord:
-      models:
-        game: "Juego"
-      attributes:
-        game:
-          code: "Código"
-          name: "Nombre"
-          header_color: "Color del Encabezado"
-          text_color: "Color del Texto"
-          background_color: "Color de Fondo"
-          start_text: "Texto de Inicio"
-          during_text: "Texto Durante el Juego"
-          end_text: "Texto de Fin"
-          images: "Imágenes"
+    models:
+      game: 'Juego'
+    attributes:
+      game:
+        code: 'Código'
+        name: 'Nombre'
+        header_color: 'Color del Encabezado'
+        text_color: 'Color del Texto'
+        background_color: 'Color de Fondo'
+        start_text: 'Texto de Inicio'
+        during_text: 'Texto Durante el Juego'
+        end_text: 'Texto de Fin'
+        images: 'Imágenes'
+        admin: 'Administrador'
   errors:
       template:
         header:
