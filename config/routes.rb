@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       member do
         get 'register_players'
         post 'save_players'
+        get 'play'        
+        get 'finish'
       end
     end
   end

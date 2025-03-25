@@ -4,7 +4,7 @@
       <%= t('players.new.title') %>
     </h1>
 
-    <%= form_with model: [@game, Player.new], url: game_players_path(@game), local: true do |f| %>
+    <%= form_with url: game_players_path(@game, locale: I18n.locale), method: :post, local: true do %>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <% 2.times do |i| %>
           <div>
@@ -13,33 +13,33 @@
             </h2>
             
             <div class="mb-4">
-              <%= f.label "players_attributes[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium" %>
-              <%= f.text_field "players_attributes[#{i}][first_name]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium" %>
+              <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= f.label "players_attributes[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium" %>
-              <%= f.text_field "players_attributes[#{i}][last_name]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium" %>
+              <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= f.label "players_attributes[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium" %>
-              <%= f.email_field "players_attributes[#{i}][email]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium" %>
+              <%= email_field_tag "players[#{i}][email]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= f.label "players_attributes[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium" %>
-              <%= f.telephone_field "players_attributes[#{i}][cellphone]", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium" %>
+              <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
           </div>
         <% end %>
       </div>
 
       <div class="mt-6 flex justify-center">
-        <%= f.submit t('players.new.submit'), class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform" %>
+        <%= submit_tag t('players.new.submit'), class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform" %>
       </div>
-    <% end %> <!-- Cierra el form_with -->
-
+    <% end %>
   </div>
 </div>
+
 

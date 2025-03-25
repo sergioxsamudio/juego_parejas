@@ -1,0 +1,192 @@
+<!-- app/views/games/play.html.erb -->
+<div class="min-h-screen flex flex-col items-center justify-center" style="background-color: <%= @game.background_color %>;">
+  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl">
+    <!-- Texto de inicio -->
+    <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
+      <%= @game.start_text %>
+    </h1>
+
+    <!-- Sección de jugadores (solo los dos últimos) -->
+    <div class="flex justify-around mb-4">
+      <% @players.each do |player| %>
+        <div class="text-center">
+          <p class="text-lg font-semibold" style="color: <%= @game.text_color %>;">
+            <%= player.first_name %>
+          </p>
+          <p class="text-lg" style="color: <%= @game.text_color %>;">
+            Puntaje: <span id="score-<%= player.id %>">0</span>
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Turno actual y temporizador -->
+    <div class="flex justify-between mb-4">
+      <p class="text-lg" style="color: <%= @game.text_color %>;">
+        Turno de: <span id="current-player"><%= @current_player.first_name %></span>
+      </p>
+      <p class="text-lg" style="color: <%= @game.text_color %>;">
+        Tiempo restante: <span id="timer"><%= @remaining_time %></span> segundos
+      </p>
+    </div>
+
+    <!-- Tablero de cartas -->
+    <div class="grid grid-cols-4 gap-4">
+      <% @images.each_with_index do |image, index| %>
+        <div class="card cursor-pointer border border-gray-300 rounded-lg overflow-hidden relative" data-index="<%= index %>" onclick="flipCard(this)">
+          <!-- Imagen trasera, visible inicialmente -->
+          <% if @game.backside_image.attached? %>
+            <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-auto" />
+          <% else %>
+            <div class="back w-full h-32 bg-gray-300 flex items-center justify-center">Carta</div>
+          <% end %>
+          <!-- Imagen frontal, oculta inicialmente -->
+          <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-auto absolute inset-0" />
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Estado del juego (durante) -->
+    <p id="game-status" class="text-center mt-4 text-lg" style="color: <%= @game.text_color %>;">
+      <%= @game.during_text %>
+    </p>
+  </div>
+</div>
+
+<!-- CSS para animar el puntaje (opcional, usa animate-pulse de Tailwind o define tu propia animación) -->
+<style>
+  /* Si no usas Tailwind, puedes definir una animación sencilla */
+  .animate-pulse {
+    animation: pulse 0.5s ease-in-out;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+</style>
+
+<script>
+  // Variables iniciales
+  let flippedCards = [];
+  let remainingTime = <%= @remaining_time %>;
+  let timerInterval = setInterval(updateTimer, 1000);
+  let currentPlayerIndex = 0;
+  // Asumimos que @players contiene solo los dos últimos jugadores
+  const players = <%= raw @players.to_json(only: [:id, :first_name]) %>;
+  const scores = {};
+
+  players.forEach(player => {
+    scores[player.id] = 0;
+  });
+
+  // Función para voltear una carta
+  function flipCard(card) {
+    if (flippedCards.length < 2 && !card.classList.contains("matched")) {
+      let frontImg = card.querySelector(".front");
+      let backImg = card.querySelector(".back");
+      // Mostrar imagen frontal, ocultar reverso
+      frontImg.classList.remove("hidden");
+      backImg.classList.add("hidden");
+      flippedCards.push(card);
+      if (flippedCards.length === 2) {
+        setTimeout(checkMatch, 1000);
+      }
+    }
+  }
+
+  // Función para verificar coincidencias
+  function checkMatch() {
+    let [card1, card2] = flippedCards;
+    let src1 = card1.querySelector(".front").src;
+    let src2 = card2.querySelector(".front").src;
+    if (src1 === src2) {
+      // Marcar cartas como "matched"
+      card1.classList.add("matched");
+      card2.classList.add("matched");
+      // Sumar puntos al jugador actual (100 puntos)
+      const currentPlayer = players[currentPlayerIndex];
+      scores[currentPlayer.id] += 100;
+      updateScoreDisplay(currentPlayer.id);
+    } else {
+      // Voltear de nuevo las cartas (después de 1 segundo)
+      setTimeout(() => {
+        card1.querySelector(".front").classList.add("hidden");
+        card1.querySelector(".back").classList.remove("hidden");
+        card2.querySelector(".front").classList.add("hidden");
+        card2.querySelector(".back").classList.remove("hidden");
+      }, 1000);
+      // Alternar turno
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      updateCurrentPlayerDisplay();
+    }
+    flippedCards = [];
+    checkGameEnd();
+  }
+
+  // Actualiza el puntaje en la interfaz con animación
+  function updateScoreDisplay(playerId) {
+    const scoreElement = document.getElementById(`score-${playerId}`);
+    scoreElement.innerText = scores[playerId];
+    scoreElement.classList.add("animate-pulse");
+    setTimeout(() => {
+      scoreElement.classList.remove("animate-pulse");
+    }, 500);
+  }
+
+  // Actualiza la visualización del jugador actual
+  function updateCurrentPlayerDisplay() {
+    const currentPlayer = players[currentPlayerIndex];
+    document.getElementById("current-player").innerText = currentPlayer.first_name;
+  }
+
+  // Función para actualizar el temporizador
+  function updateTimer() {
+    remainingTime--;
+    document.getElementById("timer").innerText = remainingTime;
+    if (remainingTime <= 0) {
+      clearInterval(timerInterval);
+      endGame();
+    }
+  }
+
+  // Verifica si todas las cartas fueron volteadas (matched)
+  function checkGameEnd() {
+    const allMatched = document.querySelectorAll(".card.matched").length === <%= @images.length %>;
+    if (allMatched) {
+      endGame();
+    }
+  }
+
+  // Función para finalizar el juego
+  function endGame() {
+    clearInterval(timerInterval);
+    let highestScore = -1;
+    let winner = null;
+    players.forEach(player => {
+      if (scores[player.id] > highestScore) {
+        highestScore = scores[player.id];
+        winner = player;
+      } else if (scores[player.id] === highestScore) {
+        winner = null; // Empate
+      }
+    });
+    if (winner) {
+      document.getElementById("game-status").innerText = `¡${winner.first_name} ha ganado con ${highestScore} puntos!`;
+    } else {
+      document.getElementById("game-status").innerText = "¡El juego ha terminado en empate!";
+    }
+    // Después de 5 segundos, redirigir a la vista finish (o donde desees)
+    setTimeout(() => {
+      window.location.href = "<%= finish_game_path(@game, locale: I18n.locale.to_s) %>";
+    }, 5000);
+  }
+</script>
+
+ 
+
+ 
+
+
+
+

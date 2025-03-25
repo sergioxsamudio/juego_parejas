@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy ]
+  before_action :set_game, only: %i[ show edit update destroy play finish ]
 
   # GET /games or /games.json
   def index
@@ -21,7 +21,6 @@ class GamesController < ApplicationController
 
   # POST /games or /games.json
   def create
-    @game = Game.new(game_params)
     @game = current_admin.games.build(game_params)
     respond_to do |format|
       if @game.save
@@ -50,25 +49,26 @@ class GamesController < ApplicationController
   # DELETE /games/1 or /games/1.json
   def destroy
     @game.destroy!
-
     respond_to do |format|
       format.html { redirect_to games_path, status: :see_other, notice: "Game was successfully destroyed." }
       format.json { head :no_content }
     end
   end
+
   def export
     @game = Game.find(params[:id])
     respond_to do |format|
       format.xlsx { render xlsx: "export", filename: "game_#{@game.code}.xlsx" }
     end
   end
+
   def enter_code
   end
 
   def verify_code
     @game = Game.find_by(code: params[:code])
     if @game
-      redirect_to new_game_player_path(game_id: @game.id)
+      redirect_to new_game_player_path(game_id: @game.id, locale: I18n.locale.to_s)
     else
       flash[:alert] = "Código inválido"
       redirect_to enter_code_games_path
@@ -93,19 +93,79 @@ class GamesController < ApplicationController
     end
   end
 
+  # ------------------
+  # Lógica del juego
+  # ------------------
+
+  def play
+    @game = Game.find(params[:id])
+    @players = Player.last(2) # Obtiene los últimos dos jugadores inscritos
+    @current_player = @players.first
+    
+    # Reinicializar variables de sesión para iniciar el juego desde cero
+    session[:turn]   = 0
+    session[:start_time] = Time.current
+    session[:matched_pairs] = []
+    
+    @current_turn   = session[:turn] % @players.size
+    @current_player = @players[@current_turn]
+    @remaining_time = 60 - (Time.current - session[:start_time]).to_i
+    
+    # Duplicar y mezclar las imágenes para formar parejas
+    @images = (@game.images.to_a * 2).shuffle
+    
+    # Solo evalúa la condición de parejas si hay imágenes disponibles
+    if @remaining_time <= 0 || (@images.any? && session[:matched_pairs].size >= (@images.size / 2))
+      redirect_to finish_game_path(@game, locale: I18n.locale.to_s), notice: "Tiempo finalizado o todas las parejas encontradas" and return
+    end
+    
+    # Se renderiza la vista play.html.erb
+  end
+  
+
+  def finish
+    @game = Game.find(params[:id])
+    @players = @game.players.order(:id)
+    
+    start_time = session[:start_time]
+    start_time = Time.parse(start_time.to_s) unless start_time.is_a?(Time)
+    @elapsed_time = Time.current - start_time
+    
+    # Si el modelo Player no tiene score, se asigna 0 a cada jugador.
+    scores = @players.map { |p| [p, (p.respond_to?(:score) ? p.score.to_i : 0)] }.to_h
+    
+    if scores.values.uniq.size == 1
+      @result = "Empate"
+    else
+      @winner = scores.max_by { |p, score| score }[0]
+      @result = "#{@winner.first_name} ganó"
+    end
+  
+    # Limpiar las variables de sesión para reiniciar el juego
+    session[:turn] = nil
+    session[:start_time] = nil
+    session[:matched_pairs] = nil
+  end
   private
 
   def player_params
     params.permit(player1: [:first_name, :last_name, :email], player2: [:first_name, :last_name, :email])
   end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_game
-      @game = Game.find(params.expect(:id))
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_game
+    @game = Game.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def game_params
-      params.expect(game: [ :code, :name, :header_color, :text_color, :background_color, :start_text, :during_text, :end_text ])
+  def game_params
+    permitted = params.require(:game).permit(
+      :code, :name, :header_color, :text_color, :background_color,
+      :start_text, :during_text, :end_text, { images: [] }, :backside_image
+    )
+    # Filtrar elementos vacíos del array de imágenes (si existen)
+    if permitted[:images].present?
+      permitted[:images] = permitted[:images].reject(&:blank?)
     end
+    permitted
+  end
 end

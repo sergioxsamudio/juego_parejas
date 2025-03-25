@@ -28,18 +28,19 @@ class PlayersController < ApplicationController
 
   # POST /players or /players.json
   def create
-    @player = Player.new(player_params)
-
-    respond_to do |format|
-      if @player.save
-        format.html { redirect_to @player, notice: "Player was successfully created." }
-        format.json { render :show, status: :created, location: @player }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @player.errors, status: :unprocessable_entity }
-      end
+    @game = Game.find(params[:game_id])
+    @players = players_params.map { |pdata| @game.players.build(pdata) }
+  
+    if @players.all?(&:valid?)
+      @players.each(&:save!)
+      redirect_to play_game_path(@game, locale: I18n.locale.to_s), notice: "Jugadores registrados correctamente."
+    else
+      flash[:alert] = "Hubo un error al registrar los jugadores. Verifica los datos."
+      render :new, status: :unprocessable_entity
     end
   end
+  
+  
 
   # PATCH/PUT /players/1 or /players/1.json
   def update
@@ -71,7 +72,10 @@ class PlayersController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def player_params
-      params.expect(player: [ :game_id, :first_name, :last_name, :email, :cellphone ])
+    def players_params
+      params.require(:players).permit(
+        "0" => [:first_name, :last_name, :email, :cellphone],
+        "1" => [:first_name, :last_name, :email, :cellphone]
+      ).to_h.values
     end
 end
