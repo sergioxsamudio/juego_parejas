@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     I18n.locale = session[:locale] || I18n.default_locale
   end
   def after_sign_in_path_for(resource)
-    new_game_path # Redirige a la vista de crear nuevo juego
+    games_path(locale: I18n.locale)
   end
 
   def change

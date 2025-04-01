@@ -1,12 +1,24 @@
-<!-- app/views/games/play.html.erb -->
-<div class="min-h-screen flex flex-col items-center justify-center" style="background-color: <%= @game.background_color %>;">
-  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl">
-    <!-- Texto de inicio -->
+<!DOCTYPE html>
+<html>
+
+<body style="background-color: <%= @game.background_color %>;">
+
+<div class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 overflow-hidden">
+    <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z"></path>
+    </svg>
+    <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z"></path>
+    </svg>
+    <div class="absolute inset-0 bg-pattern"></div>
+  </div>
+
+  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl relative z-10">
     <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
       <%= @game.start_text %>
     </h1>
 
-    <!-- Sección de jugadores (solo los dos últimos) -->
     <div class="flex justify-around mb-4">
       <% @players.each do |player| %>
         <div class="text-center">
@@ -20,7 +32,6 @@
       <% end %>
     </div>
 
-    <!-- Turno actual y temporizador -->
     <div class="flex justify-between mb-4">
       <p class="text-lg" style="color: <%= @game.text_color %>;">
         Turno de: <span id="current-player"><%= @current_player.first_name %></span>
@@ -30,31 +41,34 @@
       </p>
     </div>
 
-    <!-- Tablero de cartas -->
     <div class="grid grid-cols-4 gap-4">
       <% @images.each_with_index do |image, index| %>
         <div class="card cursor-pointer border border-gray-300 rounded-lg overflow-hidden relative" data-index="<%= index %>" onclick="flipCard(this)">
-          <!-- Imagen trasera, visible inicialmente -->
           <% if @game.backside_image.attached? %>
             <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-auto" />
           <% else %>
             <div class="back w-full h-32 bg-gray-300 flex items-center justify-center">Carta</div>
           <% end %>
-          <!-- Imagen frontal, oculta inicialmente -->
           <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-auto absolute inset-0" />
         </div>
       <% end %>
     </div>
 
-    <!-- Estado del juego (durante) -->
     <p id="game-status" class="text-center mt-4 text-lg" style="color: <%= @game.text_color %>;">
       <%= @game.during_text %>
     </p>
   </div>
 </div>
 
-<!-- CSS para animar el puntaje (opcional, usa animate-pulse de Tailwind o define tu propia animación) -->
 <style>
+  /* Fondo de rombos */
+  .bg-pattern {
+    background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
+                      linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.1;
+  }
   /* Si no usas Tailwind, puedes definir una animación sencilla */
   .animate-pulse {
     animation: pulse 0.5s ease-in-out;
@@ -179,10 +193,12 @@
     // Después de 5 segundos, redirigir a la vista finish (o donde desees)
     setTimeout(() => {
       window.location.href = "<%= finish_game_path(@game, locale: I18n.locale.to_s) %>";
-    }, 5000);
+    }, 20000);
   }
 </script>
 
+</body>
+</html>
  
 
  

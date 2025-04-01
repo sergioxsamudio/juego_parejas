@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :games do
       resources :players, only: [:new, :create]
       
+
       collection do
         get 'enter_code'
         post 'verify_code'
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
         post 'save_players'
         get 'play'        
         get 'finish'
+        get :export_players
+        delete :purge_logo
       end
     end
   end

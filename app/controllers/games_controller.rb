@@ -17,6 +17,11 @@ class GamesController < ApplicationController
 
   # GET /games/1/edit
   def edit
+    @game = Game.find(params[:id])
+  end
+  def purge_logo
+    @game.logo.purge
+    redirect_to edit_game_path(@game), notice: 'Logo eliminado correctamente.'
   end
 
   # POST /games or /games.json
@@ -55,12 +60,13 @@ class GamesController < ApplicationController
     end
   end
 
-  def export
+  def export_players
     @game = Game.find(params[:id])
     respond_to do |format|
-      format.xlsx { render xlsx: "export", filename: "game_#{@game.code}.xlsx" }
+      format.xlsx  # Esto renderizará export_players.xlsx.axlsx
     end
   end
+  
 
   def enter_code
   end
@@ -83,9 +89,21 @@ class GamesController < ApplicationController
 
   def save_players
     @game = Game.find(params[:id])
-    @player1 = @game.players.new(player_params[:player1])
-    @player2 = @game.players.new(player_params[:player2])
-
+  
+    player1_params = player_params[:player1]
+    player2_params = player_params[:player2]
+  
+    # Validar que todos los campos estén presentes
+    if player1_params[:first_name].blank? || player1_params[:last_name].blank? || player1_params[:email].blank? ||
+       player2_params[:first_name].blank? || player2_params[:last_name].blank? || player2_params[:email].blank?
+      flash[:alert] = 'Por favor, complete todos los campos.'
+      render :register_players
+      return
+    end
+  
+    @player1 = @game.players.new(player1_params)
+    @player2 = @game.players.new(player2_params)
+  
     if @player1.save && @player2.save
       redirect_to game_path(@game)
     else
@@ -125,21 +143,23 @@ class GamesController < ApplicationController
 
   def finish
     @game = Game.find(params[:id])
-    @players = @game.players.order(:id)
-    
-    start_time = session[:start_time]
-    start_time = Time.parse(start_time.to_s) unless start_time.is_a?(Time)
-    @elapsed_time = Time.current - start_time
-    
-    # Si el modelo Player no tiene score, se asigna 0 a cada jugador.
-    scores = @players.map { |p| [p, (p.respond_to?(:score) ? p.score.to_i : 0)] }.to_h
-    
-    if scores.values.uniq.size == 1
-      @result = "Empate"
+    @elapsed_time = Time.now - @game.created_at
+
+    # Lógica para determinar el ganador
+    players = @game.players
+    scores = {}
+    players.each { |player| scores[player] = player.score }
+
+    highest_score = scores.values.max
+    winners = scores.select { |_, score| score == highest_score }.keys
+
+    if winners.length == 1
+      @winner = winners.first
+      @winner_score = highest_score
     else
-      @winner = scores.max_by { |p, score| score }[0]
-      @result = "#{@winner.first_name} ganó"
+      @winner = nil # Empate
     end
+  
   
     # Limpiar las variables de sesión para reiniciar el juego
     session[:turn] = nil
@@ -160,7 +180,7 @@ class GamesController < ApplicationController
   def game_params
     permitted = params.require(:game).permit(
       :code, :name, :header_color, :text_color, :background_color,
-      :start_text, :during_text, :end_text, { images: [] }, :backside_image
+      :start_text, :during_text, :end_text, { images: [] }, :backside_image,:logo
     )
     # Filtrar elementos vacíos del array de imágenes (si existen)
     if permitted[:images].present?

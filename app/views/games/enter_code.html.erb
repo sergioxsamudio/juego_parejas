@@ -6,13 +6,23 @@
   }
 
   .animated-bg {
+    position: fixed; /* Fija el fondo en toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: linear-gradient(270deg, #667eea, #764ba2, #ff758c);
     background-size: 400% 400%;
     animation: gradientAnimation 8s ease infinite;
+    z-index: -1; /* Envía el fondo detrás del contenido */
   }
 </style>
 
-<div class="min-h-screen flex flex-col items-center justify-center animated-bg p-4">
+<!-- Fondo animado -->
+<div class="animated-bg"></div>
+
+<!-- Contenido principal -->
+<div class="min-h-screen flex flex-col items-center justify-center relative z-10">
   <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md transform transition duration-500 ease-in-out hover:scale-105">
     <h1 class="text-3xl font-bold text-center text-gray-800 mb-4 animate-fade-in">
       <%= t('games.enter_code.title') %>
@@ -35,3 +45,5 @@
     </div>
   </div>
 </div>
+
+

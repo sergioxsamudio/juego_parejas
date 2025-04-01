@@ -1,34 +1,44 @@
-<div class="min-h-screen flex flex-col items-center justify-center" style="background-color: <%= @game.background_color %>;">
-  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl">
+<div class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden" style="background-color: <%= @game.background_color %>;">
+  <div class="absolute inset-0 overflow-hidden">
+    <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z"></path>
+    </svg>
+    <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z"></path>
+    </svg>
+    <div class="absolute inset-0 bg-pattern"></div>
+  </div>
+
+  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl relative z-10">
     <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
       <%= t('players.new.title') %>
     </h1>
 
-    <%= form_with url: game_players_path(@game, locale: I18n.locale), method: :post, local: true do %>
+    <%= form_with url: game_players_path(@game, locale: I18n.locale), method: :post, local: true, id: 'player-form' do %>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <% 2.times do |i| %>
           <div>
-            <h2 class="text-xl font-semibold mb-2" style="color: <%= @game.text_color %>;">
+            <h2 class="text-xl font-semibold mb-2 text-black">
               <%= t('players.new.player_number', number: i + 1) %>
             </h2>
-            
+
             <div class="mb-4">
-              <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium" %>
+              <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium text-black" %>
               <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium" %>
+              <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium text-black" %>
               <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium" %>
+              <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium text-black" %>
               <%= email_field_tag "players[#{i}][email]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
 
             <div class="mb-4">
-              <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium" %>
+              <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium text-black" %>
               <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
             </div>
           </div>
@@ -41,5 +51,43 @@
     <% end %>
   </div>
 </div>
+
+<style>
+  .bg-pattern {
+    background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
+                      linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.1;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('player-form');
+
+    form.addEventListener('submit', function(event) {
+      let isValid = true;
+      const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          isValid = false;
+          input.classList.add('border-red-500'); // Añade borde rojo para indicar error
+        } else {
+          input.classList.remove('border-red-500'); // Remueve borde rojo si es válido
+        }
+      });
+
+      if (!isValid) {
+        event.preventDefault(); // Detiene el envío del formulario si hay errores
+        alert('Por favor, complete todos los campos.');
+      }
+    });
+  });
+</script>
+
+
+ 
 
 

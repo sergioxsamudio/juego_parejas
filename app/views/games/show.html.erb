@@ -1,17 +1,117 @@
-<% content_for :title, "Showing game" %>
+<% content_for :title, t('games.show.title', name: @game.name) %>
 
-<div class="md:w-2/3 w-full">
+<div class="max-w-6xl mx-auto px-4 py-8">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md shadow-sm">
+      <p id="notice"><%= notice %></p>
+    </div>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing game</h1>
+  <div class="flex flex-col md:flex-row gap-8">
+    <!-- Sección izquierda - Información del juego -->
+    <div class="md:w-1/2 space-y-6">
+      <div class="flex items-center gap-4">
+        <% if @game.logo.attached? %>
+          <%= image_tag @game.logo.variant(resize_to_limit: [120, 120]), class: "h-20 w-20 rounded-lg object-cover border-2 border-gray-200 shadow" %>
+        <% end %>
+        <h1 class="font-bold text-3xl text-gray-800"><%= @game.name %></h1>
+      </div>
 
-  <%= render @game %>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <h2 class="font-semibold text-lg text-gray-700 mb-4"><%= t('games.show.color_settings') %></h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Color de encabezado -->
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-md border border-gray-300 shadow-sm" style="background-color: <%= @game.header_color %>"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-600"><%= t('games.show.header_color') %></p>
+              <p class="text-xs text-gray-500"><%= @game.header_color %></p>
+            </div>
+          </div>
+          
+          <!-- Color de texto -->
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-md border border-gray-300 shadow-sm" style="background-color: <%= @game.text_color %>"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-600"><%= t('games.show.text_color') %></p>
+              <p class="text-xs text-gray-500"><%= @game.text_color %></p>
+            </div>
+          </div>
+          
+          <!-- Color de fondo -->
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-md border border-gray-300 shadow-sm" style="background-color: <%= @game.background_color %>"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-600"><%= t('games.show.background_color') %></p>
+              <p class="text-xs text-gray-500"><%= @game.background_color %></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <%= link_to "Edit this game", edit_game_path(@game), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to games", games_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <div class="sm:inline-block mt-2 sm:mt-0 sm:ml-2">
-    <%= button_to "Destroy this game", @game, method: :delete, class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-4">
+        <h2 class="font-semibold text-lg text-gray-700"><%= t('games.show.game_texts') %></h2>
+        
+        <div>
+          <h3 class="text-sm font-medium text-gray-600 mb-1"><%= t('games.show.start_text') %></h3>
+          <p class="text-gray-700 bg-gray-50 p-3 rounded"><%= @game.start_text %></p>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-medium text-gray-600 mb-1"><%= t('games.show.during_text') %></h3>
+          <p class="text-gray-700 bg-gray-50 p-3 rounded"><%= @game.during_text %></p>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-medium text-gray-600 mb-1"><%= t('games.show.end_text') %></h3>
+          <p class="text-gray-700 bg-gray-50 p-3 rounded"><%= @game.end_text %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección derecha - Imágenes del juego -->
+    <div class="md:w-1/2">
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <h2 class="font-semibold text-lg text-gray-700 mb-4"><%= t('games.show.game_cards') %></h2>
+        
+        <% if @game.images.attached? %>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <% @game.images.each do |image| %>
+              <div class="relative group">
+                <%= image_tag image.variant(resize_to_limit: [200, 200]), class: "w-full h-32 object-cover rounded-lg border border-gray-200 shadow-sm" %>
+                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <%= link_to t('games.show.view'), url_for(image), target: "_blank", class: "text-white bg-black bg-opacity-50 px-3 py-1 rounded-full text-sm" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-gray-500 italic"><%= t('games.show.no_cards') %></p>
+        <% end %>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-6">
+        <h2 class="font-semibold text-lg text-gray-700 mb-4"><%= t('games.show.card_backside') %></h2>
+        
+        <% if @game.backside_image.attached? %>
+          <div class="flex flex-col items-center">
+            <%= image_tag @game.backside_image.variant(resize_to_limit: [300, 300]), class: "w-48 h-48 object-contain border border-gray-200 rounded-lg shadow-sm" %>
+            <%= link_to t('games.show.view_full'), url_for(@game.backside_image), target: "_blank", class: "mt-3 text-emerald-600 hover:text-emerald-700 text-sm" %>
+          </div>
+        <% else %>
+          <p class="text-gray-500 italic"><%= t('games.show.no_backside') %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="mt-8 flex flex-col sm:flex-row gap-3">
+    <%= link_to t('games.show.edit_game'), edit_game_path(locale: I18n.locale, id: @game.id), class: "px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-medium text-center transition-colors" %>
+    <%= link_to t('games.show.back_to_games'), games_path, class: "px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md font-medium text-center transition-colors" %>
+    <%= button_to t('games.show.delete_game'), @game, method: :delete, 
+                  class: "px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md font-medium text-center transition-colors", 
+                  data: { turbo_confirm: t('games.show.delete_confirmation') } %>
   </div>
 </div>

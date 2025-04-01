@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Jugadores de #{@game.name}") do |sheet|
+  # Agregar la fila de encabezados
+  sheet.add_row ["Nombre", "Apellido", "Email", "Celular", "Fecha de Creación"], 
+                style: sheet.styles.add_style(b: true, alignment: { horizontal: :center })
+
+  # Agregar una fila por cada jugador
+  @game.players.each do |player|
+    sheet.add_row [
+      player.first_name,
+      player.last_name,
+      player.email,
+      player.cellphone,
+      player.created_at.strftime("%d/%m/%Y")
+    ]
+  end
+end
