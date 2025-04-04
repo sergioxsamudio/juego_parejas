@@ -4,6 +4,8 @@ en:
     show_game: "Show this game"
     back_to_games: "Back to games"
     index:
+      title: "All games"
+      view_players: "View Players"
       title: "Games"
       new_game: "New Game"
       show: "Show"
@@ -79,6 +81,13 @@ en:
       title: "Enter your details before playing"
       player_number: "Player %{number}"
       submit: "Start game"
+    index:
+      title: "Players"
+      heading: "Player List"
+      email: "Email"
+      cellphone: "Phone"
+      empty: "No players found yet."
+      back_to_games: "Back to games list"
   activerecord:
     models:
       game: "Game"

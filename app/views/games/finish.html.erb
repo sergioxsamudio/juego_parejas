@@ -18,26 +18,18 @@
   </div>
 
   <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl relative z-10">
-    <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
-      <%= @game.end_text %>
+    <h1 class="text-3xl font-bold text-center mb-6" style="color: <%= @game.header_color %>;">
+      ¡Fin del juego, gracias por jugar!
     </h1>
 
-    <p class="text-xl text-center" style="color: <%= @game.text_color %>;">
-      Tiempo de juego: <%= @elapsed_time.to_i %> segundos
-    </p>
+    <div class="text-lg text-center p-4 bg-gray-50 rounded-lg" style="color: <%= @game.text_color %>;">
+      <%= @game.end_text %>
+    </div>
 
-    <% if @winner %>
-      <p class="text-xl text-center mt-4" style="color: <%= @game.text_color %>;">
-        ¡<%= @winner.first_name %> ha ganado con <%= @winner_score %> puntos!
-      </p>
-    <% else %>
-      <p class="text-xl text-center mt-4" style="color: <%= @game.text_color %>;">
-        ¡El juego ha terminado en empate!
-      </p>
-    <% end %>
-
-    <div class="mt-6 flex justify-center">
-      <a href="<%= new_game_player_path(@game, locale: I18n.locale.to_s) %>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform" style="background-color: <%= @game.header_color %>;">
+    <div class="mt-8 flex justify-center">
+      <a href="<%= new_game_player_path(@game, locale: I18n.locale.to_s) %>" 
+         class="px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform text-white" 
+         style="background-color: <%= @game.header_color %>;">
         Jugar de Nuevo
       </a>
     </div>
@@ -45,7 +37,6 @@
 </div>
 
 <style>
-  /* Fondo de rombos */
   .bg-pattern {
     background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
                       linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);

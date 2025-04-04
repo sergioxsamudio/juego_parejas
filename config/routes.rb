@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     root 'games#enter_code'
 
     resources :games do
-      resources :players, only: [:new, :create]
+      resources :players, only: [:new, :create,:index]
       
 
       collection do
