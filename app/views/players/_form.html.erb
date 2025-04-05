@@ -1,13 +1,30 @@
-<div class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden" style="background-color: <%= @game.background_color %>;">
-  <div class="absolute inset-0 overflow-hidden">
-    <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z"></path>
-    </svg>
-    <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="<%= @game.text_color %>" fill-opacity="0.6" d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z"></path>
-    </svg>
-    <div class="absolute inset-0 bg-pattern"></div>
-  </div>
+<div class="fixed inset-0 -z-10">
+<% if @game.background_image.attached? %>
+<div class="fixed inset-0 -z-10"
+     style="background-image: url('<%= url_for(@game.background_image) %>');
+            background-size: cover;
+            background-position: center;">
+</div>
+<% else %>
+<div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
+  <!-- SVG decorativo superior -->
+  <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+          d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
+    </path>
+  </svg>
+  <!-- SVG decorativo inferior -->
+  <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+          d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
+    </path>
+  </svg>
+  <div class="absolute inset-0 bg-pattern"></div>
+</div>
+<% end %>
+</div>
+
+
 
   <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl relative z-10">
     <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
@@ -21,32 +38,28 @@
             <h2 class="text-xl font-semibold mb-2 text-black">
               <%= t('players.new.player_number', number: i + 1) %>
             </h2>
-
             <div class="mb-4">
               <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium text-black" %>
-              <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
             </div>
-
             <div class="mb-4">
               <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium text-black" %>
-              <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
             </div>
-
             <div class="mb-4">
               <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium text-black" %>
-              <%= email_field_tag "players[#{i}][email]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= email_field_tag "players[#{i}][email]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
             </div>
-
             <div class="mb-4">
               <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium text-black" %>
-              <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+              <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
             </div>
           </div>
         <% end %>
       </div>
 
       <div class="mt-6 flex justify-center">
-        <%= submit_tag t('players.new.submit'), class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-transform" %>
+        <%= submit_tag t('players.new.submit'), class: "text-white font-bold py-2 px-4 rounded-lg", style: "background-color: #{@game.text_color};" %>
       </div>
     <% end %>
   </div>
@@ -63,29 +76,28 @@
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('player-form');
-
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
       let isValid = true;
       const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
-
       inputs.forEach(input => {
         if (!input.value.trim()) {
           isValid = false;
-          input.classList.add('border-red-500'); // Añade borde rojo para indicar error
+          input.classList.add('border-red-500');
         } else {
-          input.classList.remove('border-red-500'); // Remueve borde rojo si es válido
+          input.classList.remove('border-red-500');
         }
       });
-
       if (!isValid) {
-        event.preventDefault(); // Detiene el envío del formulario si hay errores
+        event.preventDefault();
         alert('Por favor, complete todos los campos.');
       }
     });
   });
 </script>
+
+
 
 
  

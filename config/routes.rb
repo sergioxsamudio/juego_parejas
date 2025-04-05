@@ -11,9 +11,11 @@ Rails.application.routes.draw do
       collection do
         get 'enter_code'
         post 'verify_code'
+        
       end
 
       member do
+        get :start
         get 'register_players'
         post 'save_players'
         get 'play'        

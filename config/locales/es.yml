@@ -1,5 +1,10 @@
 es:
   games:
+    finish:
+      title: "¡Fin del juego, gracias por jugar!"
+      back_to_start: "Volver al inicio"
+    play:
+      play_button: "Jugar"
     show_game: "Mostrar este juego"
     back_to_games: "Volver a juegos"
     index:
@@ -36,6 +41,8 @@ es:
       errors_header:
         one: "1 error impidió guardar el juego:"
         other: "%{count} errores impidieron guardar el juego:"
+      background_image: "Imagen de fondo"
+      background_image_hint: "Suba una imagen para el fondo del juego (opcional)"
       code: "Código del juego"
       code_placeholder: "Ej: JUEGO-001"
       name: "Nombre del juego"

@@ -1,0 +1,69 @@
+<!-- Fondo dinámico (imagen o color) -->
+<div class="fixed inset-0 -z-10">
+<% if @game.background_image.attached? %>
+<div class="fixed inset-0 -z-10"
+     style="background-image: url('<%= url_for(@game.background_image) %>');
+            background-size: cover;
+            background-position: center;">
+</div>
+<% else %>
+<div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
+  <!-- SVG decorativo superior -->
+  <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+          d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
+    </path>
+  </svg>
+  <!-- SVG decorativo inferior -->
+  <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+          d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
+    </path>
+  </svg>
+  <div class="absolute inset-0 bg-pattern"></div>
+</div>
+<% end %>
+</div>
+
+<!-- Contenido principal -->
+<div class="min-h-screen flex flex-col items-center justify-center relative z-10 p-4">
+
+  <!-- Logo del juego -->
+  <% if @game.logo.attached? %>
+    <div class="mb-8 animate-fade-in">
+      <%= image_tag @game.logo.variant(resize_to_limit: [300, 300]), class: "max-h-64 w-auto object-contain" %>
+    </div>
+  <% end %>
+
+  <!-- Botón Jugar -->
+  
+  <div class="animate-slide-in">
+  <%= link_to t('games.play.play_button'),
+              new_game_player_path(game_id: @game.id, locale: I18n.locale),
+              class: "text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-110 focus:outline-none focus:ring-2",
+              style: "background-color: #{@game.text_color}; border-color: #{@game.text_color}; box-shadow: 0 4px 14px 0 #{@game.text_color}33;" %>
+    </div>
+
+
+  <!-- Texto del juego -->
+  <% if @game.start_text.present? %>
+    <div class="mt-8 max-w-md text-center animate-fade-in"
+         style="color: <%= @game.text_color.presence || '#333333' %>;">
+      <p class="text-lg"><%= @game.start_text %></p>
+    </div>
+  <% end %>
+</div>
+
+<!-- Estilo del patrón (solo si no hay imagen de fondo) -->
+<% unless @game.background_image.attached? %>
+  <style>
+    .bg-pattern {
+      background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
+                        linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      opacity: 0.1;
+    }
+  </style>
+<% end %>
+

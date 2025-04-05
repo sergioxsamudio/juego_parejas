@@ -1,6 +1,11 @@
 en:
   hello: "Hello"
   games:
+    finish:
+      title: "¡END OF THE GAME, THANKS FOR PLAING!"
+      back_to_start: "BACK TO START"
+    play:
+      play_button: "Play"
     show_game: "Show this game"
     back_to_games: "Back to games"
     index:
@@ -38,6 +43,8 @@ en:
         one: "1 error prohibited this game from being saved:"
         other: "%{count} errors prohibited this game from being saved:"
       code: "Game code"
+      background_image: "Background image"
+      background_image_hint: "Upload an image for the game background (optional)"
       submit_button: "Save"
       code_placeholder: "Ex: GAME-001"
       name: "Game name"

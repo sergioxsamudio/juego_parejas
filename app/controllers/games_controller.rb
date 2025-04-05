@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: %i[ show edit update destroy play finish ]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :start, :register_players, :play, :finish]
 
   # GET /games or /games.json
   def index
@@ -74,10 +75,19 @@ class GamesController < ApplicationController
   def verify_code
     @game = Game.find_by(code: params[:code])
     if @game
-      redirect_to new_game_player_path(game_id: @game.id, locale: I18n.locale.to_s)
+      session[:game_id] = @game.id
+
+      redirect_to start_game_path(@game, locale: I18n.locale.to_s)
+
     else
       flash[:alert] = "Código inválido"
       redirect_to enter_code_games_path
+    end
+  end
+  def start
+    @game = Game.find(params[:id])
+    unless @game
+      redirect_to enter_code_games_path, alert: t('games.enter_code.required')
     end
   end
 
@@ -180,7 +190,7 @@ class GamesController < ApplicationController
   def game_params
     permitted = params.require(:game).permit(
       :code, :name, :header_color, :text_color, :background_color,
-      :start_text, :during_text, :end_text, { images: [] }, :backside_image,:logo
+      :start_text, :during_text, :end_text, { images: [] }, :backside_image,:logo,:background_image
     )
     # Filtrar elementos vacíos del array de imágenes (si existen)
     if permitted[:images].present?
