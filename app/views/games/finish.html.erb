@@ -26,26 +26,25 @@
 </div>
 
 <!-- Cuerpo -->
-<body style="background-color: <%= @game.background_color %>;">
-  <div class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl relative z-10">
-      <h1 class="text-3xl font-bold text-center mb-6" style="color: <%= @game.header_color %>;">
-        <%= t('games.finish.title') %> <!-- Traducción: ¡Fin del juego, gracias por jugar! -->
+<body class="m-0 p-0">
+  <div class="min-h-screen w-full flex items-center justify-center px-4 relative z-10">
+    <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-3xl text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-6" style="color: <%= @game.header_color %>;">
+        <%= t('games.finish.title') %>
       </h1>
 
-      <div class="text-lg text-center p-4 bg-gray-50 rounded-lg" style="color: <%= @game.text_color %>;">
+      <div class="text-lg sm:text-2xl p-4 bg-gray-100 rounded-xl mb-8" style="color: <%= @game.text_color %>;">
         <%= @game.end_text %>
       </div>
 
-      <div class="mt-8 flex justify-center">
-      <%= link_to t('games.finish.back_to_start'),
-      start_game_path(@game, locale: I18n.locale),
-      class: "px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform text-white",
-      style: "background-color: #{@game.header_color};" %>
-
-      </div>
-    </div>
-  </div>
+      <div class="flex justify-center">
+  <%= link_to start_game_path(@game, locale: I18n.locale),
+              class: "flex items-center gap-6 text-white font-bold text-3xl sm:text-4xl px-12 py-8 rounded-full shadow-2xl transition-transform transform hover:scale-105",
+              style: "background-color: #{@game.header_color};" do %>
+    <img src="<%= asset_path('icon-play.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14" />
+    <span><%= t('games.finish.back_to_start') %></span>
+  <% end %>
+</div>
 
   <!-- Estilo patrón de fondo si no hay imagen -->
   <% unless @game.background_image.attached? %>
@@ -60,4 +59,6 @@
     </style>
   <% end %>
 </body>
+
+
 

@@ -10,13 +10,11 @@
 </div>
 <% else %>
 <div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
-  <!-- SVG decorativo superior -->
   <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill="<%= @game.text_color %>" fill-opacity="0.6"
           d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
     </path>
   </svg>
-  <!-- SVG decorativo inferior -->
   <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill="<%= @game.text_color %>" fill-opacity="0.6"
           d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
@@ -26,54 +24,58 @@
 </div>
 <% end %>
 </div>
-  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl relative z-10">
-    <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
-      <%= @game.start_text %>
-    </h1>
 
-    <div class="flex justify-around mb-4">
-      <% @players.each do |player| %>
-        <div class="text-center">
-          <p class="text-lg font-semibold" style="color: <%= @game.text_color %>;">
-            <%= player.first_name %>
-          </p>
-          <p class="text-lg" style="color: <%= @game.text_color %>;">
-            Puntaje: <span id="score-<%= player.id %>">0</span>
-          </p>
-        </div>
-      <% end %>
-    </div>
+<div class="bg-white shadow-lg rounded-3xl p-10 w-full max-w-6xl mx-auto min-h-screen overflow-auto relative z-10 flex flex-col justify-between">
+  <h1 class="text-5xl font-bold text-center mb-10" style="color: <%= @game.header_color %>;">
+    <%= @game.start_text %>
+  </h1>
 
-    <div class="flex justify-between mb-4">
-      <p class="text-lg" style="color: <%= @game.text_color %>;">
-        Turno de: <span id="current-player"><%= @current_player.first_name %></span>
-      </p>
-      <p class="text-lg" style="color: <%= @game.text_color %>;">
-        Tiempo restante: <span id="timer"><%= @remaining_time %></span> segundos
-      </p>
-    </div>
+  <div class="flex justify-around mb-8 text-3xl flex-wrap gap-y-4">
+    <% @players.each do |player| %>
+      <div class="text-center">
+        <p class="font-semibold" style="color: <%= @game.text_color %>;">
+          <%= player.first_name %>
+        </p>
+        <p style="color: <%= @game.text_color %>;">
+          Puntaje: <span id="score-<%= player.id %>">0</span>
+        </p>
+      </div>
+    <% end %>
+  </div>
 
-    <div class="grid grid-cols-4 gap-4">
-      <% @images.each_with_index do |image, index| %>
-        <div class="card cursor-pointer border border-gray-300 rounded-lg overflow-hidden relative" data-index="<%= index %>" onclick="flipCard(this)">
-          <% if @game.backside_image.attached? %>
-            <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-auto" />
-          <% else %>
-            <div class="back w-full h-32 bg-gray-300 flex items-center justify-center">Carta</div>
-          <% end %>
-          <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-auto absolute inset-0" />
-        </div>
-      <% end %>
-    </div>
-
-    <p id="game-status" class="text-center mt-4 text-lg" style="color: <%= @game.text_color %>;">
-      <%= @game.during_text %>
+  <div class="flex justify-between mb-8 text-3xl">
+    <p style="color: <%= @game.text_color %>;">
+      Turno de: <span id="current-player"><%= @current_player.first_name %></span>
+    </p>
+    <p style="color: <%= @game.text_color %>;">
+      Tiempo restante: <span id="timer"><%= @remaining_time %></span> s
     </p>
   </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 auto-rows-auto justify-center">
+    <% @images.each_with_index do |image, index| %>
+      <div class="card cursor-pointer border border-gray-300 rounded-2xl overflow-hidden relative aspect-w-1 aspect-h-1" data-index="<%= index %>" onclick="flipCard(this)">
+        <% if @game.backside_image.attached? %>
+          <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-full object-contain" />
+        <% else %>
+          <div class="back w-full h-full bg-gray-300 flex items-center justify-center text-2xl">Carta</div>
+        <% end %>
+        <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-full object-contain absolute inset-0" />
+      </div>
+    <% end %>
+  </div>
+
+  <p id="game-status" class="text-center mt-10 text-3xl font-semibold" style="color: <%= @game.text_color %>;">
+    <%= @game.during_text %>
+  </p>
 </div>
 
 <style>
-  /* Fondo de rombos */
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
   .bg-pattern {
     background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
                       linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
@@ -81,7 +83,6 @@
     background-position: 0 0, 20px 20px;
     opacity: 0.1;
   }
-  /* Si no usas Tailwind, puedes definir una animación sencilla */
   .animate-pulse {
     animation: pulse 0.5s ease-in-out;
   }
@@ -90,15 +91,16 @@
     50% { transform: scale(1.3); }
     100% { transform: scale(1); }
   }
+  .aspect-w-1 {
+    aspect-ratio: 1 / 1;
+  }
 </style>
 
 <script>
-  // Variables iniciales
   let flippedCards = [];
   let remainingTime = <%= @remaining_time %>;
   let timerInterval = setInterval(updateTimer, 1000);
   let currentPlayerIndex = 0;
-  // Asumimos que @players contiene solo los dos últimos jugadores
   const players = <%= raw @players.to_json(only: [:id, :first_name]) %>;
   const scores = {};
 
@@ -106,12 +108,10 @@
     scores[player.id] = 0;
   });
 
-  // Función para voltear una carta
   function flipCard(card) {
     if (flippedCards.length < 2 && !card.classList.contains("matched")) {
       let frontImg = card.querySelector(".front");
       let backImg = card.querySelector(".back");
-      // Mostrar imagen frontal, ocultar reverso
       frontImg.classList.remove("hidden");
       backImg.classList.add("hidden");
       flippedCards.push(card);
@@ -121,28 +121,23 @@
     }
   }
 
-  // Función para verificar coincidencias
   function checkMatch() {
     let [card1, card2] = flippedCards;
     let src1 = card1.querySelector(".front").src;
     let src2 = card2.querySelector(".front").src;
     if (src1 === src2) {
-      // Marcar cartas como "matched"
       card1.classList.add("matched");
       card2.classList.add("matched");
-      // Sumar puntos al jugador actual (100 puntos)
       const currentPlayer = players[currentPlayerIndex];
       scores[currentPlayer.id] += 100;
       updateScoreDisplay(currentPlayer.id);
     } else {
-      // Voltear de nuevo las cartas (después de 1 segundo)
       setTimeout(() => {
         card1.querySelector(".front").classList.add("hidden");
         card1.querySelector(".back").classList.remove("hidden");
         card2.querySelector(".front").classList.add("hidden");
         card2.querySelector(".back").classList.remove("hidden");
       }, 1000);
-      // Alternar turno
       currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
       updateCurrentPlayerDisplay();
     }
@@ -150,7 +145,6 @@
     checkGameEnd();
   }
 
-  // Actualiza el puntaje en la interfaz con animación
   function updateScoreDisplay(playerId) {
     const scoreElement = document.getElementById(`score-${playerId}`);
     scoreElement.innerText = scores[playerId];
@@ -160,13 +154,11 @@
     }, 500);
   }
 
-  // Actualiza la visualización del jugador actual
   function updateCurrentPlayerDisplay() {
     const currentPlayer = players[currentPlayerIndex];
     document.getElementById("current-player").innerText = currentPlayer.first_name;
   }
 
-  // Función para actualizar el temporizador
   function updateTimer() {
     remainingTime--;
     document.getElementById("timer").innerText = remainingTime;
@@ -176,7 +168,6 @@
     }
   }
 
-  // Verifica si todas las cartas fueron volteadas (matched)
   function checkGameEnd() {
     const allMatched = document.querySelectorAll(".card.matched").length === <%= @images.length %>;
     if (allMatched) {
@@ -184,7 +175,6 @@
     }
   }
 
-  // Función para finalizar el juego
   function endGame() {
     clearInterval(timerInterval);
     let highestScore = -1;
@@ -194,7 +184,7 @@
         highestScore = scores[player.id];
         winner = player;
       } else if (scores[player.id] === highestScore) {
-        winner = null; // Empate
+        winner = null;
       }
     });
     if (winner) {
@@ -202,7 +192,6 @@
     } else {
       document.getElementById("game-status").innerText = "¡El juego ha terminado en empate!";
     }
-    // Después de 5 segundos, redirigir a la vista finish (o donde desees)
     setTimeout(() => {
       window.location.href = "<%= finish_game_path(@game, locale: I18n.locale.to_s) %>";
     }, 20000);
@@ -211,6 +200,9 @@
 
 </body>
 </html>
+
+
+
  
 
  

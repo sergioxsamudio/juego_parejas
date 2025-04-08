@@ -19,13 +19,14 @@
   </head>
 
   <body class="bg-gray-100">
-    <!-- Navbar fijo con color dinámico -->
-    <nav class="fixed top-0 left-0 right-0 z-50 py-4 px-6 flex justify-between items-center shadow-md"
+  <div class="group fixed top-0 left-0 right-0 z-50">
+  <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none group-hover:pointer-events-auto">
+    <nav class="py-4 px-6 flex justify-between items-center shadow-md"
          style="background-color: <%= @game&.header_color || '#ffffff' %>">
       <div class="flex items-center">
         <% if @game&.logo&.attached? %>
           <div class="h-10 w-10 mr-2 bg-white bg-opacity-20 rounded flex items-center justify-center">
-            <%= image_tag @game.logo.variant(resize_to_limit: [40, 40]), 
+            <%= image_tag @game.logo.variant(resize_to_limit: [40, 40]),
                 class: "max-h-full max-w-full object-contain" %>
           </div>
         <% else %>
@@ -35,19 +36,25 @@
         <% end %>
       </div>
 
-      <!-- Selector de idioma -->
       <div>
-        <%= link_to "🇪🇸 Español", change_locale_path("es"), class: "hover:opacity-80", style: "color: #{@game&.text_color || '#3b82f6'}" %> |
-        <%= link_to "🇺🇸 English", change_locale_path("en"), class: "hover:opacity-80", style: "color: #{@game&.text_color || '#3b82f6'}" %>
+        <%= link_to "🇪🇸 Español", change_locale_path("es"),
+                    class: "hover:opacity-80",
+                    style: "color: #{@game&.text_color || '#3b82f6'}" %> |
+        <%= link_to "🇺🇸 English", change_locale_path("en"),
+                    class: "hover:opacity-80",
+                    style: "color: #{@game&.text_color || '#3b82f6'}" %>
       </div>
     </nav>
+  </div>
+</div>
 
-    <!-- Espacio para el navbar fijo -->
-    <div class="pt-20"></div>
+<!-- Espacio para el navbar fijo -->
+<div class="pt-4"></div>
 
-    <main class="container mx-auto px-5 pb-10">
-      <%= yield %>
-    </main>
-  </body>
-</html>
+
+  <main class="container mx-auto px-5 pb-10">
+    <%= yield %>
+  </main>
+</body>
+
 

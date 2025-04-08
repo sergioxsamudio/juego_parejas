@@ -1,101 +1,103 @@
-<div class="fixed inset-0 -z-10">
-<% if @game.background_image.attached? %>
-<div class="fixed inset-0 -z-10"
-     style="background-image: url('<%= url_for(@game.background_image) %>');
-            background-size: cover;
-            background-position: center;">
-</div>
-<% else %>
-<div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
-  <!-- SVG decorativo superior -->
-  <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
-          d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
-    </path>
-  </svg>
-  <!-- SVG decorativo inferior -->
-  <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill="<%= @game.text_color %>" fill-opacity="0.6"
-          d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
-    </path>
-  </svg>
-  <div class="absolute inset-0 bg-pattern"></div>
-</div>
-<% end %>
-</div>
+<body class="bg-gray-100 h-screen overflow-hidden flex items-center justify-center">
+  <div class="fixed inset-0 -z-10">
+    <% if @game.background_image.attached? %>
+      <div class="fixed inset-0 -z-10"
+           style="background-image: url('<%= url_for(@game.background_image) %>');
+                  background-size: cover;
+                  background-position: center;">
+      </div>
+    <% else %>
+      <div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
+        <!-- SVG superior -->
+        <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+                d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
+          </path>
+        </svg>
+        <!-- SVG inferior -->
+        <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="<%= @game.text_color %>" fill-opacity="0.6"
+                d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
+          </path>
+        </svg>
+        <div class="absolute inset-0 bg-pattern"></div>
+      </div>
+    <% end %>
+  </div>
 
-
-
-  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl relative z-10">
-    <h1 class="text-3xl font-bold text-center mb-4" style="color: <%= @game.header_color %>;">
+  <div class="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-6xl z-10">
+    <h1 class="text-5xl font-bold text-center mb-8" style="color: <%= @game.header_color %>;">
       <%= t('players.new.title') %>
     </h1>
 
     <%= form_with url: game_players_path(@game, locale: I18n.locale), method: :post, local: true, id: 'player-form' do %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 text-xl">
         <% 2.times do |i| %>
           <div>
-            <h2 class="text-xl font-semibold mb-2 text-black">
+            <h2 class="text-2xl font-semibold mb-4 text-black">
               <%= t('players.new.player_number', number: i + 1) %>
             </h2>
-            <div class="mb-4">
-              <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-sm font-medium text-black" %>
-              <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
+            <div class="mb-6">
+              <%= label_tag "players[#{i}][first_name]", t('activerecord.attributes.player.first_name'), class: "block text-lg font-medium text-black" %>
+              <%= text_field_tag "players[#{i}][first_name]", "", class: "mt-2 block w-full px-4 py-3 text-xl border border-gray-300 rounded-xl shadow-md" %>
             </div>
-            <div class="mb-4">
-              <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-sm font-medium text-black" %>
-              <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
+            <div class="mb-6">
+              <%= label_tag "players[#{i}][last_name]", t('activerecord.attributes.player.last_name'), class: "block text-lg font-medium text-black" %>
+              <%= text_field_tag "players[#{i}][last_name]", "", class: "mt-2 block w-full px-4 py-3 text-xl border border-gray-300 rounded-xl shadow-md" %>
             </div>
-            <div class="mb-4">
-              <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-sm font-medium text-black" %>
-              <%= email_field_tag "players[#{i}][email]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
+            <div class="mb-6">
+              <%= label_tag "players[#{i}][email]", t('activerecord.attributes.player.email'), class: "block text-lg font-medium text-black" %>
+              <%= email_field_tag "players[#{i}][email]", "", class: "mt-2 block w-full px-4 py-3 text-xl border border-gray-300 rounded-xl shadow-md" %>
             </div>
-            <div class="mb-4">
-              <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-sm font-medium text-black" %>
-              <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm" %>
+            <div class="mb-6">
+              <%= label_tag "players[#{i}][cellphone]", t('activerecord.attributes.player.cellphone'), class: "block text-lg font-medium text-black" %>
+              <%= telephone_field_tag "players[#{i}][cellphone]", "", class: "mt-2 block w-full px-4 py-3 text-xl border border-gray-300 rounded-xl shadow-md" %>
             </div>
           </div>
         <% end %>
       </div>
 
-      <div class="mt-6 flex justify-center">
-        <%= submit_tag t('players.new.submit'), class: "text-white font-bold py-2 px-4 rounded-lg", style: "background-color: #{@game.text_color};" %>
-      </div>
-    <% end %>
-  </div>
+      <div class="mt-10 flex justify-center">
+  <%= submit_tag t('players.new.submit'),
+      class: "text-white text-2xl font-bold py-6 px-14 rounded-3xl shadow-2xl hover:scale-105 transition duration-300",
+      style: "background-color: #{@game.text_color};" %>
 </div>
 
-<style>
-  .bg-pattern {
-    background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
-                      linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 20px 20px;
-    opacity: 0.1;
-  }
-</style>
+    <% end %>
+  </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('player-form');
-    form.addEventListener('submit', function (event) {
-      let isValid = true;
-      const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
-      inputs.forEach(input => {
-        if (!input.value.trim()) {
-          isValid = false;
-          input.classList.add('border-red-500');
-        } else {
-          input.classList.remove('border-red-500');
+  <style>
+    .bg-pattern {
+      background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
+                        linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      opacity: 0.1;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('player-form');
+      form.addEventListener('submit', function (event) {
+        let isValid = true;
+        const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+        inputs.forEach(input => {
+          if (!input.value.trim()) {
+            isValid = false;
+            input.classList.add('border-red-500');
+          } else {
+            input.classList.remove('border-red-500');
+          }
+        });
+        if (!isValid) {
+          event.preventDefault();
+          alert('Por favor, complete todos los campos.');
         }
       });
-      if (!isValid) {
-        event.preventDefault();
-        alert('Por favor, complete todos los campos.');
-      }
     });
-  });
-</script>
+  </script>
+</body>
 
 
 

@@ -31,28 +31,31 @@
   <!-- Logo del juego -->
   <% if @game.logo.attached? %>
     <div class="mb-8 animate-fade-in">
-      <%= image_tag @game.logo.variant(resize_to_limit: [300, 300]), class: "max-h-64 w-auto object-contain" %>
-    </div>
+    <%= image_tag @game.logo.variant(resize_to_limit: [1900, 900]), class: "max-w-[1900px] max-h-[900px] w-auto h-auto object-contain" %>
+  </div>
   <% end %>
 
   <!-- Botón Jugar -->
-  
-  <div class="animate-slide-in">
-  <%= link_to t('games.play.play_button'),
-              new_game_player_path(game_id: @game.id, locale: I18n.locale),
-              class: "text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transform transition duration-300 ease-in-out hover:scale-110 focus:outline-none focus:ring-2",
-              style: "background-color: #{@game.text_color}; border-color: #{@game.text_color}; box-shadow: 0 4px 14px 0 #{@game.text_color}33;" %>
-    </div>
+  <%= link_to new_game_player_path(game_id: @game.id, locale: I18n.locale),
+  class: "inline-flex items-center justify-center text-white font-extrabold py-8 px-16 rounded-full text-4xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4",
+  style: "background-color: #{@game.text_color}; border-color: #{@game.text_color}; box-shadow: 0 8px 24px 0 #{@game.text_color}33;" do %>
+
+  <%= image_tag("icon-play.png", class: "w-12 h-12 mr-4", alt: "Play") %>
+
+  <%= t('games.play.play_button') %>
+<% end %>
+
+
 
 
   <!-- Texto del juego -->
   <% if @game.start_text.present? %>
-    <div class="mt-8 max-w-md text-center animate-fade-in"
-         style="color: <%= @game.text_color.presence || '#333333' %>;">
-      <p class="text-lg"><%= @game.start_text %></p>
-    </div>
-  <% end %>
-</div>
+  <div class="mt-12 max-w-2xl mx-auto text-center animate-fade-in"
+       style="color: <%= @game.text_color.presence || '#333333' %>;">
+    <p class="text-3xl font-semibold leading-relaxed"><%= @game.start_text %></p>
+  </div>
+<% end %>
+
 
 <!-- Estilo del patrón (solo si no hay imagen de fondo) -->
 <% unless @game.background_image.attached? %>

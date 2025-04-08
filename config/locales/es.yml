@@ -76,6 +76,9 @@ es:
       login: "Iniciar sesión como administrador"
   devise:
     sessions:
+      admin:
+        signed_in: "El administrador ha iniciado sesión." # o "Administrador conectado."
+        signed_in: "Sesión iniciada." # o "Usuario conectado."
       new:
         log_in: "Iniciar sesión"
         email: "Correo electrónico"

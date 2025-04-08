@@ -77,6 +77,9 @@ en:
       login: "Login as Administrator"
   devise:
     sessions:
+      admin:
+        signed_in: "Admin signed in."
+        signed_in: "Signed in."
       new:
         log_in: "Log in"
         email: "Email"
