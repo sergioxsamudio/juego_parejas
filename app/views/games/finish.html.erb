@@ -38,12 +38,12 @@
       </div>
 
       <div class="flex justify-center">
-  <%= link_to start_game_path(@game, locale: I18n.locale),
-              class: "flex items-center gap-6 text-white font-bold text-3xl sm:text-4xl px-12 py-8 rounded-full shadow-2xl transition-transform transform hover:scale-105",
-              style: "background-color: #{@game.header_color};" do %>
-    <img src="<%= asset_path('icon-play.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14" />
-    <span><%= t('games.finish.back_to_start') %></span>
-  <% end %>
+      <%= link_to start_game_path(@game, locale: I18n.locale),
+      class: "flex items-center gap-6 text-white font-bold text-3xl sm:text-4xl px-8 py-4 shadow-2xl transition-transform transform hover:scale-105",
+      style: "background-color: #{@game.header_color};" do %>
+<img src="<%= asset_path('icon-home.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14" />
+<span><%= t('games.finish.back_to_start') %></span>
+<% end %>
 </div>
 
   <!-- Estilo patrón de fondo si no hay imagen -->

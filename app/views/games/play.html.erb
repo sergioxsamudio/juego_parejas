@@ -51,19 +51,26 @@
       Tiempo restante: <span id="timer"><%= @remaining_time %></span> s
     </p>
   </div>
-
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 auto-rows-auto justify-center">
-    <% @images.each_with_index do |image, index| %>
-      <div class="card cursor-pointer border border-gray-300 rounded-2xl overflow-hidden relative aspect-w-1 aspect-h-1" data-index="<%= index %>" onclick="flipCard(this)">
-        <% if @game.backside_image.attached? %>
-          <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-full object-contain" />
-        <% else %>
-          <div class="back w-full h-full bg-gray-300 flex items-center justify-center text-2xl">Carta</div>
-        <% end %>
-        <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-full object-contain absolute inset-0" />
-      </div>
+  <div class="grid grid-cols-3 gap-6 auto-rows-auto justify-center">
+  <% @images.each_with_index do |image, index| %>
+   <div class="card cursor-pointer border border-gray-300 rounded-2xl overflow-hidden relative aspect-w-3 aspect-h-2" data-index="<%= index %>" onclick="flipCard(this)">
+    <% if @game.backside_image.attached? %>
+     <img src="<%= url_for(@game.backside_image) %>" alt="Carta reverso" class="back w-full h-full object-contain" />
+    <% else %>
+     <div class="back w-full h-full bg-gray-300 flex items-center justify-center text-2xl">Carta</div>
     <% end %>
-  </div>
+    <img src="<%= url_for(image) %>" alt="Imagen de juego" class="front hidden w-full h-full object-contain absolute inset-0" />
+   </div>
+  <% end %>
+</div>
+<div class="flex justify-center">
+      <%= link_to start_game_path(@game, locale: I18n.locale),
+      class: "flex items-center gap-6 text-white font-bold text-3xl sm:text-4xl px-8 py-4 shadow-2xl transition-transform transform hover:scale-105",
+      style: "background-color: #{@game.header_color};" do %>
+<img src="<%= asset_path('icon-home.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14" />
+<span><%= t('games.finish.back_to_start') %></span>
+<% end %>
+</div>
 
   <p id="game-status" class="text-center mt-10 text-3xl font-semibold" style="color: <%= @game.text_color %>;">
     <%= @game.during_text %>
