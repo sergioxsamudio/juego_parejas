@@ -4,7 +4,7 @@ es:
       title: "¡Fin del juego, gracias por jugar!"
       back_to_start: "Volver al inicio"
     play:
-      play_button: "Jugar"
+      play_button: "JUEGA Y PARTICIPA "
     show_game: "Mostrar este juego"
     back_to_games: "Volver a juegos"
     index:

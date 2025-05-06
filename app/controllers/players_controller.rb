@@ -65,6 +65,14 @@ class PlayersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  def update_score
+    @player = Player.find(params[:id])
+    if @player.update(score: params[:score])
+      render json: { status: 'success' }
+    else
+      render json: { status: 'error', errors: @player.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

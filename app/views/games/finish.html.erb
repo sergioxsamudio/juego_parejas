@@ -1,4 +1,3 @@
-<!-- Fondo dinámico (imagen o color) -->
 <div class="fixed inset-0 -z-10">
   <% if @game.background_image.attached? %>
     <div class="fixed inset-0 -z-10"
@@ -8,13 +7,11 @@
     </div>
   <% else %>
     <div class="fixed inset-0 -z-10" style="background-color: <%= @game.background_color.presence || '#eeeeee' %>;">
-      <!-- SVG decorativo superior -->
       <svg class="absolute top-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="<%= @game.text_color %>" fill-opacity="0.6"
               d="M0,128L80,112C160,96,320,64,480,85.3C640,107,800,181,960,197.3C1120,213,1280,171,1360,149.3L1440,128V0H0Z">
         </path>
       </svg>
-      <!-- SVG decorativo inferior -->
       <svg class="absolute bottom-0 left-0 w-full h-40" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill="<%= @game.text_color %>" fill-opacity="0.6"
               d="M0,160L80,165.3C160,171,320,181,480,165.3C640,149,800,107,960,96C1120,85,1280,107,1360,117.3L1440,128V320H0Z">
@@ -25,7 +22,6 @@
   <% end %>
 </div>
 
-<!-- Cuerpo -->
 <body class="m-0 p-0">
   <div class="min-h-screen w-full flex items-center justify-center px-4 relative z-10">
     <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-3xl text-center">
@@ -34,31 +30,33 @@
       </h1>
 
       <div class="text-lg sm:text-2xl p-4 bg-gray-100 rounded-xl mb-8" style="color: <%= @game.text_color %>;">
-        <%= @game.end_text %>
+        <% if @resultado_del_juego.present? %>
+          <%= @resultado_del_juego %>
+        <% else %>
+          <%= @game.end_text %>
+        <% end %>
       </div>
 
-      <div class="flex justify-center">
+      <<div class="flex justify-center">
       <%= link_to start_game_path(@game, locale: I18n.locale),
-      class: "flex items-center gap-6 text-white font-bold text-3xl sm:text-4xl px-8 py-4 shadow-2xl transition-transform transform hover:scale-105",
-      style: "background-color: #{@game.header_color};" do %>
-<img src="<%= asset_path('icon-home.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14" />
-<span><%= t('games.finish.back_to_start') %></span>
-<% end %>
-</div>
-
-  <!-- Estilo patrón de fondo si no hay imagen -->
-  <% unless @game.background_image.attached? %>
-    <style>
-      .bg-pattern {
-        background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
-                          linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
-        background-size: 40px 40px;
-        background-position: 0 0, 20px 20px;
-        opacity: 0.1;
-      }
-    </style>
-  <% end %>
+          class: "flex items-center justify-center text-white font-bold text-3xl sm:text-4xl px-8 py-4 shadow-2xl transition-transform transform hover:scale-105 text-center",
+          style: "background-color: #{@game.header_color};" do %>
+        <img src="<%= asset_path('icon-home.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14 mr-2" />
+        <span><%= t('games.finish.back_to_start').gsub(' ', '<br>').html_safe %></span>
+      <% end %>
+    </div>
+      <% unless @game.background_image.attached? %>
+        <style>
+          .bg-pattern {
+            background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
+                              linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.1;
+          }
+        </style>
+      <% end %>
+    </div>
+  </div>
 </body>
-
-
 

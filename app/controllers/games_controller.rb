@@ -158,19 +158,23 @@ class GamesController < ApplicationController
     # Lógica para determinar el ganador
     players = @game.players
     scores = {}
-    players.each { |player| scores[player] = player.score }
+    players.each { |player| scores[player] = player.score.to_i } # Asegúrate de que el puntaje sea un entero
 
-    highest_score = scores.values.max
+    highest_score = scores.values.max || 0
     winners = scores.select { |_, score| score == highest_score }.keys
 
     if winners.length == 1
-      @winner = winners.first
-      @winner_score = highest_score
+      @resultado_del_juego = "#{winners.first.first_name} ha ganado con #{highest_score} puntos!"
     else
-      @winner = nil # Empate
+      @resultado_del_juego = "¡El juego ha terminado en empate!"
     end
-  
-  
+
+    if request.post?
+      render json: { redirect_url: game_finish_path(@game, locale: I18n.locale.to_s) }
+    else
+      # No necesitas hacer nada especial para @resultado_del_juego en GET
+    end
+
     # Limpiar las variables de sesión para reiniciar el juego
     session[:turn] = nil
     session[:start_time] = nil

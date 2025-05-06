@@ -37,11 +37,11 @@
 
   <!-- Botón Jugar -->
   <%= link_to new_game_player_path(game_id: @game.id, locale: I18n.locale),
-    class: "inline-flex items-center justify-center text-white font-extrabold py-4 px-8 text-4xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4",
-    style: "background-color: #{@game.header_color}; border-color: #{@game.text_color}; box-shadow: 0 8px 24px 0 #{@game.text_color}33;" do %>
-    <%= image_tag("icon-play.png", class: "w-12 h-12 mr-4", alt: "Play") %>
-    <%= t('games.play.play_button') %>
-  <% end %>
+  class: "inline-flex items-center justify-center text-white font-extrabold py-4 px-8 text-4xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 text-center",
+  style: "background-color: #{@game.header_color}; border-color: #{@game.text_color}; box-shadow: 0 8px 24px 0 #{@game.text_color}33;" do %>
+  <%= image_tag("icon-play.png", class: "w-12 h-12 mr-4", alt: "Play") %>
+  <%= t('games.play.play_button').gsub(' ', '<br>').html_safe %>
+<% end %>
 
 
 
