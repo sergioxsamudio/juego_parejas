@@ -155,18 +155,33 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @elapsed_time = Time.now - @game.created_at
 
-    # Lógica para determinar el ganador
-    players = @game.players
-    scores = {}
-    players.each { |player| scores[player] = player.score.to_i } # Asegúrate de que el puntaje sea un entero
+    # Obtener los dos últimos jugadores que jugaron
+    last_two_players = @game.players.last(2)
+    @winner = nil
+    @winner_score = nil
+    @resultado_del_juego = nil # Inicializamos a nil
 
-    highest_score = scores.values.max || 0
-    winners = scores.select { |_, score| score == highest_score }.keys
+    if last_two_players.size == 2
+      # Calcular los puntajes solo para los dos últimos jugadores
+      scores = {}
+      last_two_players.each { |player| scores[player] = player.score.to_i }
 
-    if winners.length == 1
-      @resultado_del_juego = "#{winners.first.first_name} ha ganado con #{highest_score} puntos!"
+      highest_score = scores.values.max || 0
+      winners = scores.select { |_, score| score == highest_score }.keys
+
+      if winners.length == 1
+        @winner = winners.first
+        @winner_score = highest_score
+        @resultado_del_juego = "#{winners.first.first_name} ha ganado con #{highest_score} puntos!"
+      else
+        @resultado_del_juego = "¡El juego ha terminado en empate entre los últimos jugadores!"
+      end
+    elsif last_two_players.size == 1
+      @resultado_del_juego = "#{last_two_players.first.first_name} es el único jugador y ha ganado."
+      @winner = last_two_players.first
+      @winner_score = last_two_players.first.score.to_i
     else
-      @resultado_del_juego = "¡El juego ha terminado en empate!"
+      # Si no hay suficientes jugadores, @resultado_del_juego permanece nil
     end
 
     if request.post?

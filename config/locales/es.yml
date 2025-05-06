@@ -2,6 +2,7 @@ es:
   games:
     finish:
       title: "¡Fin del juego, gracias por jugar!"
+      winner_score: "%{winner_name} ganó con %{score} puntos."
       back_to_start: "Volver al inicio"
     play:
       play_button: "JUEGA Y PARTICIPA "

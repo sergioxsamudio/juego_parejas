@@ -3,6 +3,7 @@ en:
   games:
     finish:
       title: "¡END OF THE GAME, THANKS FOR PLAING!"
+      winner_score: "%{winner_name} won with %{score} points."
       back_to_start: "BACK TO START"
     play:
       play_button: "Play"
