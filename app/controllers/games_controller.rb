@@ -174,10 +174,10 @@ class GamesController < ApplicationController
         @winner_score = highest_score
         @resultado_del_juego = "#{winners.first.first_name} ha ganado con #{highest_score} puntos!"
       else
-        @resultado_del_juego = "¡El juego ha terminado en empate entre los últimos jugadores!"
+        @resultado_del_juego = "¡El juego ha terminado en empate !"
       end
     elsif last_two_players.size == 1
-      @resultado_del_juego = "#{last_two_players.first.first_name} es el único jugador y ha ganado."
+      @resultado_del_juego = "#{last_two_players.first.first_name} es el ganador."
       @winner = last_two_players.first
       @winner_score = last_two_players.first.score.to_i
     else

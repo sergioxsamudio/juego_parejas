@@ -45,15 +45,21 @@
       <p class="text-lg sm:text-xl italic" style="color: <%= @game.text_color %>;">
         <%= @game.end_text %>
       </p>
-
-      <div class="flex justify-center mt-8">
-        <%= link_to start_game_path(@game, locale: I18n.locale),
-            class: "flex items-center justify-center text-white font-bold text-3xl sm:text-4xl px-8 py-4 shadow-2xl transition-transform transform hover:scale-105 text-center",
-            style: "background-color: #{@game.header_color};" do %>
-          <img src="<%= asset_path('icon-home.png') %>" alt="Play" class="w-12 h-12 sm:w-14 sm:h-14 mr-2" />
-          <span><%= t('games.finish.back_to_start').gsub(' ', '<br>').html_safe %></span>
-        <% end %>
-      </div>
+      <%= link_to new_game_player_path(game_id: @game.id, locale: I18n.locale),
+      class: "inline-flex items-center justify-center text-white font-extrabold py-4 px-8 text-4xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 text-center",
+      style: "background-color: #{@game.header_color}; border-color: #{@game.text_color}; box-shadow: 0 8px 24px 0 #{@game.text_color}33;" do %>
+      <%= image_tag("Icon-return.png", class: "w-18 h-18 mr-4", alt: "Play") %>
+      <%= t('games.finish.play').gsub(' ', '<br>').html_safe %>
+    <% end %>
+    
+    <div class="flex justify-center mt-8">
+      <%= link_to start_game_path(@game, locale: I18n.locale),
+        class: "inline-flex items-center justify-center text-white font-extrabold py-4 px-8 text-4xl shadow-2xl transform transition-transform hover:scale-105 text-center",
+        style: "background-color: #{@game.header_color};" do %>
+        <%= image_tag(asset_path('icon-home.png'), alt: "Play", class: "w-18 h-18 mr-2") %>
+        <span><%= t('games.finish.back_to_start').gsub(' ', '<br>').html_safe %></span>
+      <% end %>
+    </div>
       <% unless @game.background_image.attached? %>
         <style>
           .bg-pattern {
