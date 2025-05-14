@@ -172,9 +172,9 @@ class GamesController < ApplicationController
       if winners.length == 1
         @winner = winners.first
         @winner_score = highest_score
-        @resultado_del_juego = "#{winners.first.first_name} ha ganado con #{highest_score} puntos!"
+        @resultado_del_juego = "#{winners.first.first_name} CON #{highest_score} PUNTOS"
       else
-        @resultado_del_juego = "¡El juego ha terminado en empate !"
+        @resultado_del_juego = "¡... UN EMPATE !"
       end
     elsif last_two_players.size == 1
       @resultado_del_juego = "#{last_two_players.first.first_name} es el ganador."

@@ -1,7 +1,7 @@
 es:
   games:
     finish:
-      title: "¡Fin del juego, gracias por jugar!"
+      title: "MUY BIEN! HAS TERMINADO, EL GANADOR FUE:"
       winner_score: "%{winner_name} ganó con %{score} puntos."
       back_to_start: "Volver al inicio"
       play: "JUGAR NUEVAMENTE"
