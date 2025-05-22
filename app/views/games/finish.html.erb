@@ -26,7 +26,7 @@
   <div class="min-h-screen w-full flex items-center justify-center px-4 relative z-10">
     <div class="bg-white shadow-2xl rounded-2xl p-20 w-full max-w-3xl text-center">
       <h1 class="text-6xl sm:text-7xl font-extrabold mb-24 uppercase" style="color: <%= @game.header_color %>;">
-        <%= t('games.finish.title').upcase %>
+        <%= @game.end_text.upcase %>
       </h1>
 
       <% if @resultado_del_juego.present? %>
@@ -40,25 +40,21 @@
         <%# end %>
       <% end %>
 
-      <p class="text-2xl sm:text-3xl italic mb-16" style="color: <%= @game.text_color %>;">
-        <%= @game.end_text %>
-      </p>
-
       <p class="text-5xl sm:text-6xl font-extrabold drop-shadow-md mb-20 uppercase" style="color: <%= @game.header_color %>;">
         GRACIAS POR JUGAR
       </p>
 
       <%= link_to new_game_player_path(game_id: @game.id, locale: I18n.locale),
-          class: "inline-flex items-center justify-center text-white font-extrabold py-8 px-12 text-6xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 text-center uppercase",
-          style: "background-color: #{@game.header_color}; border-color: #{@game.text_color}; box-shadow: 0 12px 36px 0 #{@game.text_color}33;" do %>
+            class: "inline-flex items-center justify-center text-white font-extrabold py-8 px-12 text-6xl shadow-2xl transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 text-center uppercase",
+            style: "background-color: #{@game.header_color}; border-color: #{@game.text_color}; box-shadow: 0 12px 36px 0 #{@game.text_color}33;" do %>
         <%= image_tag("Icon-return.png", class: "w-32 h-32 mr-8", alt: "Play") %>
         <%= t('games.finish.play').upcase.gsub(' ', '<br>').html_safe %>
       <% end %>
 
       <div class="flex justify-center mt-20">
         <%= link_to start_game_path(@game, locale: I18n.locale),
-            class: "inline-flex items-center justify-center text-white font-extrabold py-8 px-12 text-6xl shadow-2xl transform transition-transform hover:scale-105 text-center uppercase",
-            style: "background-color: #{@game.header_color};" do %>
+              class: "inline-flex items-center justify-center text-white font-extrabold py-8 px-12 text-6xl shadow-2xl transform transition-transform hover:scale-105 text-center uppercase",
+              style: "background-color: #{@game.header_color};" do %>
           <%= image_tag(asset_path('icon-home.png'), alt: "Play", class: "w-32 h-32 mr-6") %>
           <span><%= t('games.finish.back_to_start').upcase.gsub(' ', '<br>').html_safe %></span>
         <% end %>
@@ -67,7 +63,7 @@
         <style>
           .bg-pattern {
             background-image: linear-gradient(45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%),
-                              linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
+                                  linear-gradient(-45deg, <%= @game.text_color %> 25%, transparent 25%, transparent 75%, <%= @game.text_color %> 75%);
             background-size: 80px 80px;
             background-position: 0 0, 40px 40px;
             opacity: 0.1;
