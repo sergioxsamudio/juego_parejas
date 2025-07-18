@@ -42,7 +42,7 @@ gem "thruster", require: false
 gem 'caxlsx_rails', '~> 0.6.0'
 gem 'devise'
 gem 'kolor-picker'
-gem 'redis', '~> 4.0'
+gem 'redis', '~> 5.4'
 gem 'image_processing'
 gem 'mini_magick'
 
